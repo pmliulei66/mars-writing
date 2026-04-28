@@ -1,24 +1,24 @@
 # 深邃墨灰主题 - 自定义版本
-name: autumn-warm
+name: deep-slate
 type: code
 description: "【深邃墨灰】沉稳大气，深灰色调，专业质感"
 version: "4.0"
 
-# 风格说明
 style_info:
   mood: "沉稳大气"
   colors: "深灰色调"
   best_for: "深度思考、专业观点、商务文章"
 
-# 颜色方案 - 沉稳配色
+# 沉稳配色方案
 colors:
   background: "#f5f5f5"
   text: "#2d3436"
   primary: "#2c3e50"
   secondary: "#34495e"
+  accent: "#7f8c8d"
   quote_background: "#e8e8e8"
 
-# 渲染器配置（代码渲染，无需 AI）
+# 渲染器配置 - 标题突出 + 句子换行
 renderer:
   h2_icon: "◆"
   h2_icon_shadow: "0 0 14px rgba(44, 62, 80, 0.6)"
@@ -31,10 +31,12 @@ renderer:
   line_height: "1.8"
   letter_spacing: "0.3px"
   hr_style: "border: none; height: 1px; background: linear-gradient(90deg, transparent, rgba(44, 62, 80, 0.3), transparent);"
-  # 自定义标题样式
+  # 自定义样式
   h1_font_size: "24px"
   h1_font_weight: "800"
+  h1_border_bottom: "2px solid #2c3e50"
   h2_font_size: "20px"
+  h2_border_left: "4px solid #2c3e50"
+  h2_background: "rgba(44, 62, 80, 0.03)"
   h3_background: "rgba(44, 62, 80, 0.06)"
-  # 段落分割模式
   paragraph_separator: "sentence"

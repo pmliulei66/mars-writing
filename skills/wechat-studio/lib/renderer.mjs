@@ -8,6 +8,15 @@ import { Marked } from 'marked'
 const FONT_FAMILY = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
 
 /**
+ * 将长段落按句子分割
+ */
+function splitBySentence(text) {
+  const sentenceRegex = /([^。！？.!?]+[。！？.!?]+)/g
+  const matches = text.match(sentenceRegex) || []
+  return matches.map(s => s.trim()).filter(s => s).join('\n\n')
+}
+
+/**
  * 将 Markdown 渲染为微信公众号 HTML
  * @param {string} markdown
  * @param {object} theme - 已解析的主题 YAML 对象
@@ -26,7 +35,7 @@ export function renderMarkdown(markdown, theme) {
   const fontSize = r.font_size || '16px'
   const lineHeight = r.line_height || '1.75'
   const letterSpacing = r.letter_spacing || '0.3px'
-  const h2Icon = r.h2_icon || '▶'
+  const h2Icon = r.h2_icon || '◆'
   const h2IconShadow = r.h2_icon_shadow || 'none'
   const cardBgImage = r.card_background_image || 'none'
   const cardBgSize = r.card_background_size || 'auto'
@@ -34,6 +43,15 @@ export function renderMarkdown(markdown, theme) {
   const cardShadow = r.card_shadow || '0 4px 12px rgba(0,0,0,0.05)'
   const cardRadius = r.card_border_radius || '12px'
   const hrStyle = r.hr_style || 'border: none; height: 1px; background-color: rgba(0,0,0,0.1);'
+  
+  // 自定义标题样式
+  const h1FontSize = r.h1_font_size || '22px'
+  const h1FontWeight = r.h1_font_weight || '700'
+  const h2FontSize = r.h2_font_size || '18px'
+  const h3Bg = r.h3_background || 'transparent'
+  
+  // 段落分割模式
+  const paragraphSeparator = r.paragraph_separator || 'normal'
 
   // 图片收集
   const images = []
@@ -53,20 +71,15 @@ export function renderMarkdown(markdown, theme) {
       // 标题（marked v9: heading(text, depth)）
       heading(text, depth) {
         if (depth === 1) {
-          return `<h1 style="font-family: ${FONT_FAMILY}; font-size: 22px; font-weight: 700; color: ${primary}; text-align: center; margin: 0 0 8px 0; padding: 0;">${text}</h1>\n`
+          return `<h1 style="font-family: ${FONT_FAMILY}; font-size: ${h1FontSize}; font-weight: ${h1FontWeight}; color: #ffffff; text-align: center; margin: 0 0 20px 0; padding: 16px 20px; background-color: ${primary}; border-radius: 8px; letter-spacing: 2px;">${text}</h1>\n`
         }
         if (depth === 2) {
-          return (
-            `<h2 style="font-family: ${FONT_FAMILY}; font-size: 18px; font-weight: 700; color: ${primary}; border-bottom: 1px dashed rgba(0,0,0,0.15); padding-bottom: 6px; margin: 24px 0 12px 0;">` +
-            `<span style="color: ${primary}; text-shadow: ${h2IconShadow}; margin-right: 6px;">${h2Icon}</span>` +
-            `<span style="color: ${primary};">${text}</span>` +
-            `</h2>\n`
-          )
+          return `<h2 style="font-family: ${FONT_FAMILY}; font-size: ${h2FontSize}; font-weight: 700; color: #ffffff; text-align: center; margin: 32px 0 16px 0; padding: 12px 20px; background-color: ${primary}; border-radius: 6px;">${text}</h2>\n`
         }
         if (depth === 3) {
-          return `<h3 style="font-family: ${FONT_FAMILY}; font-size: 16px; font-weight: 700; color: ${secondary}; border-bottom: 2px solid ${primary}; display: inline-block; padding-bottom: 2px; margin: 20px 0 10px 0;">${text}</h3>\n`
+          return `<h3 style="font-family: ${FONT_FAMILY}; font-size: 17px; font-weight: 700; color: ${secondary}; text-align: center; margin: 24px 0 12px 0; padding: 10px 16px; background-color: ${h3Bg}; border-radius: 6px;">${text}</h3>\n`
         }
-        return `<h${depth} style="font-family: ${FONT_FAMILY}; color: ${textColor}; margin: 16px 0 8px 0;">${text}</h${depth}>\n`
+        return `<h${depth} style="font-family: ${FONT_FAMILY}; font-size: 16px; font-weight: 600; color: ${secondary}; text-align: center; margin: 16px 0 8px 0; padding: 8px 12px; background-color: rgba(44, 62, 80, 0.04); border-radius: 4px;">${text}</h${depth}>\n`
       },
 
       // 段落（marked v9: paragraph(text)）
@@ -79,15 +92,32 @@ export function renderMarkdown(markdown, theme) {
         if (/<!--\s*IMG:\d+\s*-->/.test(text)) {
           const parts = text.split(/(<!--\s*IMG:\d+\s*-->)/)
           return parts.map(part => {
-            if (/^<!--\s*IMG:\d+\s*-->$/.test(part.trim())) {
+            if (/^<!--\s*IMG:\d+\s*-->/.test(part.trim())) {
               return part.trim() + '\n'
             }
             const clean = part.trim()
             if (!clean) return ''
-            return `<p style="font-family: ${FONT_FAMILY}; font-size: ${fontSize}; line-height: ${lineHeight}; color: ${textColor}; margin: 0 0 16px 0;">${clean}</p>\n`
+            if (paragraphSeparator === 'sentence') {
+              const sentences = splitBySentence(clean)
+              if (sentences.includes('\n\n')) {
+                return sentences.split('\n\n').filter(s => s.trim()).map(sentence => 
+                  `<p style="font-family: ${FONT_FAMILY}; font-size: ${fontSize}; line-height: ${lineHeight}; color: ${textColor}; margin: 0 0 16px 0; text-align: justify;">${sentence}</p>\n`
+                ).join('')
+              }
+              return `<p style="font-family: ${FONT_FAMILY}; font-size: ${fontSize}; line-height: ${lineHeight}; color: ${textColor}; margin: 0 0 16px 0; text-align: justify;">${clean}</p>\n`
+            }
+            return `<p style="font-family: ${FONT_FAMILY}; font-size: ${fontSize}; line-height: ${lineHeight}; color: ${textColor}; margin: 0 0 16px 0; text-align: justify;">${clean}</p>\n`
           }).join('')
         }
-        return `<p style="font-family: ${FONT_FAMILY}; font-size: ${fontSize}; line-height: ${lineHeight}; color: ${textColor}; margin: 0 0 16px 0;">${text}</p>\n`
+        if (paragraphSeparator === 'sentence') {
+          const sentences = splitBySentence(text)
+          if (sentences.includes('\n\n')) {
+            return sentences.split('\n\n').filter(s => s.trim()).map(sentence => 
+              `<p style="font-family: ${FONT_FAMILY}; font-size: ${fontSize}; line-height: ${lineHeight}; color: ${textColor}; margin: 0 0 16px 0; text-align: justify;">${sentence}</p>\n`
+            ).join('')
+          }
+        }
+        return `<p style="font-family: ${FONT_FAMILY}; font-size: ${fontSize}; line-height: ${lineHeight}; color: ${textColor}; margin: 0 0 16px 0; text-align: justify;">${text}</p>\n`
       },
 
       // 加粗
@@ -102,7 +132,7 @@ export function renderMarkdown(markdown, theme) {
 
       // 引用块（marked v9: blockquote(quote)）
       blockquote(quote) {
-        return `<blockquote style="font-family: ${FONT_FAMILY}; background-color: ${quoteBackground}; border-left: 5px solid ${primary}; box-shadow: inset 0 0 12px rgba(0,0,0,0.04); margin: 16px 0; padding: 12px 16px; border-radius: 0 8px 8px 0;">${quote}</blockquote>\n`
+        return `<blockquote style="font-family: ${FONT_FAMILY}; background-color: ${quoteBackground}; border-left: 5px solid ${primary}; margin: 16px 0; padding: 12px 16px; border-radius: 0 8px 8px 0;">${quote}</blockquote>\n`
       },
 
       // 代码块（marked v9: code(code, lang)）
@@ -173,7 +203,7 @@ export function renderMarkdown(markdown, theme) {
     `border: ${cardBorder}`,
     `box-shadow: ${cardShadow}`,
     `border-radius: ${cardRadius}`,
-    'padding: 25px',
+    'padding: 28px',
     'max-width: 800px',
     'margin: 0 auto',
     'box-sizing: border-box',
