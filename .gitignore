@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# User data
+~/.mars-writing/
+
+# Environment / credentials
+.env
+config.yaml
+
+# Upload cache
+upload-cache.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Draft artifacts
+draft.json
+*.html
