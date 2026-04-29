@@ -162,6 +162,18 @@ node "$WECHAT_STUDIO_DIR/scripts/convert.mjs" <article.md> -o <output.html>
 - 将文章保存为 Markdown 文件
 - 确保格式正确（标题层级、段落分隔）
 
+### 第 6.5 步：封面图
+
+**每篇文章必须生成独立的封面图**，禁止复用其他文章的封面。
+
+**规则**：
+- 使用 AI 生图工具生成与文章主题相关的封面图
+- 封面图风格：扁平插画、简约、治愈系色调
+- 上传封面图获取 `thumb_media_id`
+- 每篇文章的 `thumb_media_id` 必须不同
+
+**批量写作时**：每写完一篇文章，在发布前必须先生成该篇的封面图，再进入下一篇。不能跳过封面图写下一篇。
+
 ### 第 7 步：发布
 
 调用 wechat-studio 的脚本创建草稿：
@@ -174,6 +186,7 @@ node "$WECHAT_STUDIO_DIR/scripts/create-draft.mjs" <output.html> --title "<标�
 **发布前检查**：
 - [ ] HTML 渲染正确
 - [ ] 标题已确定
+- [ ] 封面图已上传且 thumb_media_id 唯一
 - [ ] 用户确认可以发布
 
 ## 创作理念
