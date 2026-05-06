@@ -1,0 +1,46 @@
+{
+  "history": [
+    {
+      "book_id": 23,
+      "book_title": "自卑与超越",
+      "timestamp": "2026-04-28T12:12:57.702Z"
+    },
+    {
+      "book_id": 28,
+      "book_title": "深度学习",
+      "timestamp": "2026-04-28T12:13:58.157Z"
+    },
+    {
+      "book_id": 15,
+      "book_title": "学会提问",
+      "timestamp": "2026-04-28T12:13:58.255Z"
+    },
+    {
+      "book_id": 44,
+      "book_title": "万历十五年",
+      "timestamp": "2026-04-28T12:13:58.256Z"
+    },
+    {
+      "book_id": 42,
+      "book_title": "水浒传",
+      "timestamp": "2026-04-28T12:13:58.257Z"
+    },
+    {
+      "book_id": 33,
+      "book_title": "史蒂夫·乔布斯传",
+      "timestamp": "2026-04-28T12:13:58.258Z"
+    },
+    {
+      "book_id": 10,
+      "book_title": "时间管理",
+      "timestamp": "2026-04-28T12:13:58.258Z"
+    },
+    {
+      "book_id": 12,
+      "book_title": "心流",
+      "timestamp": "2026-04-28T12:13:58.259Z"
+    }
+  ],
+  "max_history": 20,
+  "last_updated": "2026-04-28"
+}

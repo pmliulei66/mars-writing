@@ -1,0 +1,46 @@
+{
+  "evals": [
+    {
+      "id": "eval-1",
+      "name": "从零写《被讨厌的勇气》书评",
+      "description": "测试完整 7 步写作流程：选书→开头→正文→标题→去痕→排版→发布",
+      "input": "帮我写一篇《被讨厌的勇气》的书评",
+      "expected": {
+        "has_intro": true,
+        "word_count_range": [1500, 2000],
+        "core_points": 3,
+        "has_personal_experience": true,
+        "has_follow_cta": true,
+        "title_count": 5,
+        "ai_score_min": 40
+      },
+      "status": "pending"
+    },
+    {
+      "id": "eval-2",
+      "name": "优化已有书评文章",
+      "description": "测试从第 5 步（去痕）开始的优化流程",
+      "input": "帮我优化这篇文章：[用户提供的文章内容]",
+      "expected": {
+        "ai_score_improved": true,
+        "filler_removed": true,
+        "rhythm_varied": true,
+        "personal_voice_added": true
+      },
+      "status": "pending"
+    },
+    {
+      "id": "eval-3",
+      "name": "批量生成标题",
+      "description": "测试批量标题生成能力",
+      "input": "帮我给以下 5 篇文章各生成 5 个标题",
+      "expected": {
+        "articles_count": 5,
+        "titles_per_article": 5,
+        "formula_labeled": true,
+        "top3_recommended": true
+      },
+      "status": "pending"
+    }
+  ]
+}
