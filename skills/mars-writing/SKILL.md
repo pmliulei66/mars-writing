@@ -227,6 +227,12 @@ node "$WECHAT_STUDIO_DIR/scripts/convert.mjs" <article.md> -o <output.html>
 - 将文章保存为 Markdown 文件
 - 确保格式正确（标题层级、段落分隔）
 
+**封面图插入文章开头**：
+- Markdown 转 HTML 完成后，将第 6 步上传封面图获得的 `wechat_url` 插入到 HTML 内容的最开头
+- 插入格式：`<img src="${wechat_url}" style="width:100%;border-radius:8px;margin-bottom:24px;" />`
+- 封面图必须在正文第一个 `<section>` 之前，作为文章的首屏视觉
+- 示例：如果 HTML 以 `<div style="background-color...">` 开头，则将 `<img>` 标签插入到该 `<div>` 内部的最前面
+
 ### 第 8 步：发布
 
 调用 wechat-studio 的脚本创建草稿：
